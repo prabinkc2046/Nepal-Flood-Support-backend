@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 from fastapi.middleware.cors import CORSMiddleware
 import os
 from datetime import datetime
+import uvicorn  # Import uvicorn to run the server
 
 # Load environment variables from .env file
 load_dotenv()
@@ -13,12 +14,8 @@ load_dotenv()
 # FastAPI instance
 app = FastAPI()
 
-# Enable CORS for React (localhost:3000) or other front-end origins
-origins = [
-    "http://localhost:3000",  # React local server
-    "http://127.0.0.1:3000",  # Another potential address for local React
-    # Add other origins as needed
-]
+# Load allowed origins from .env (comma-separated string) and split into a list
+origins = os.getenv("ALLOWED_ORIGINS", "").split(",")
 
 app.add_middleware(
     CORSMiddleware,
@@ -80,3 +77,7 @@ async def list_donors():
     donors = donors_collection.find({}, {"_id": 0, "email": 0})  # Exclude _id and email
     return list(donors)
 
+# Run the FastAPI app with the port from the environment variable
+if __name__ == "__main__":
+    port = int(os.getenv("PORT", 8000))  # Default to port 8000 if not set in .env
+    uvicorn.run(app, host="0.0.0.0", port=port)
