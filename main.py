@@ -15,7 +15,7 @@ load_dotenv()
 app = FastAPI()
 
 # Load allowed origins from .env (comma-separated string) and split into a list
-origins = os.getenv("ALLOWED_ORIGINS", "").split(",")
+origins = os.getenv("ALLOWED_ORIGINS")
 
 app.add_middleware(
     CORSMiddleware,
