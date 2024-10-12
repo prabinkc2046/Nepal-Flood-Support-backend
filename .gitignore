@@ -1,0 +1,116 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Environment variables file
+.env
+
+# FastAPI static files
+/static/*
+!/static/.keep
+
+# FastAPI templates folder (if using Jinja2)
+!/templates/
+
+# Logs
+logs/
+*.log
+*.out
+*.err
+
+# Database
+*.sqlite3
+*.db
+
+# Virtual environment
+.venv/
+venv/
+ENV/
+env/
+env.bak/
+env.bak.bak/
+
+# pipenv & poetry
+Pipfile
+Pipfile.lock
+poetry.lock
+
+# pyenv
+.python-version
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# pyright
+pyrightcache/
+
+# Pycharm IDE specific
+.idea/
+
+# VSCode IDE specific
+.vscode/
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+pytest_cache/
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+
+# Docker
+*.dockerfile
+docker-compose*.yml
+Dockerfile
+
+# Sphinx documentation
+docs/_build/
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# Heroku
+*.procfile
+.procfile.d/
+.heroku/
+
+# Flask cache
+instance/
+.webassets-cache
+
+# Scrapy
+.scrapy
+
+# Sentry
+.sentrycli
+
+# macOS specific files
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Linux specific files
+*~
+# temporary files created by editors
+*.swp
+*.swo
