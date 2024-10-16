@@ -58,17 +58,37 @@ class DonorResponse(BaseModel):
 @app.post("/add_donor")
 async def add_donor(donor: Donor):
     # Check if donor with this email already exists
-    if donors_collection.find_one({"email": donor.email}):
-        raise HTTPException(status_code=400, detail="Donor with this email already exists.")
-    
-    # Insert donor into collection
-    donor_dict = donor.dict()
-    donors_collection.insert_one(donor_dict)
-    
-    # Remove _id from the response
-    donor_dict.pop("_id", None)  # Remove the _id field if it exists
-    
-    return {"message": "Donor added successfully", "donor": donor_dict}
+    existing_donor = donors_collection.find_one({"email": donor.email})
+    if existing_donor:
+        # If donor exists, update their information
+        updated_donor = {
+            "first_name": donor.first_name,
+            "last_name": donor.last_name,
+            # Increment the total amount with the new donation amount
+            "amount": existing_donor["amount"] + donor.amount,
+            "thoughts": donor.thoughts,  # Replace thoughts with the new message
+            "date": donor.date,  # Update with the latest donation date
+            "publish_name": donor.publish_name,  # Update publish_name status
+            # Increment the contribution count by 1
+            "contributionsCount": existing_donor["contributionsCount"] + 1
+        }
+
+        # Update the donor in the database
+        donors_collection.update_one(
+            {"email": donor.email},  # Match by email
+            {"$set": updated_donor}  # Set the new data
+        )
+        
+        return {"message": "Donor information updated successfully", "donor": updated_donor}
+    else:
+        # If donor does not exist, insert a new donor
+        donor_dict = donor.dict()
+        donors_collection.insert_one(donor_dict)
+
+        # Remove _id from the response
+        donor_dict.pop("_id", None)  # Remove the _id field if it exists
+
+        return {"message": "Donor added successfully", "donor": donor_dict}
 
 
 # API to list donors
