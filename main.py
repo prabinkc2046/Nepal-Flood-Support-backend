@@ -62,8 +62,8 @@ async def add_donor(donor: Donor):
     if existing_donor:
         # If donor exists, update their information
         updated_donor = {
-            "first_name": donor.first_name,
-            "last_name": donor.last_name,
+             "first_name": existing_donor["first_name"],  # Keep the original first name
+            "last_name": existing_donor["last_name"],  # Keep the original last name
             # Increment the total amount with the new donation amount
             "amount": existing_donor["amount"] + donor.amount,
             "thoughts": donor.thoughts,  # Replace thoughts with the new message
