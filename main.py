@@ -60,18 +60,23 @@ class DonorResponse(BaseModel):
 
 from fastapi import Cookie
 
+from fastapi.responses import JSONResponse
+
 @app.get("/csrf_token")
 async def get_csrf_token(csrf_protect: CsrfProtect = Depends()):
     csrf_token = csrf_protect.generate_csrf()
-    return {"csrfToken": csrf_token}
+    response = JSONResponse(content={"csrfToken": csrf_token})
+    response.set_cookie(key="X-CSRF-Token", value=csrf_token, httponly=True)
+    return response
+
 
 
 # Add donor endpoint
 @app.post("/add_donor")
-async def add_donor(donor: Donor, csrf_protect: CsrfProtect = Depends()):
+async def add_donor(donor: Donor, csrf_protect: CsrfProtect = Depends(), csrf_token: str = Cookie(None)):
     try:
         # CSRF Validation
-        csrf_protect.validate_csrf(csrf_protect)
+        csrf_protect.validate_csrf(csrf_token)
     except Exception as e:
         raise HTTPException(status_code=403, detail=f"CSRF validation failed: {str(e)}")
 
